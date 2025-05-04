@@ -165,36 +165,36 @@ router.post("/bank/:id", async(req,res)=>{
   }
 })
 
-router.get('/location', async (req, res) => {
-  let country;
-  try {
-    // Attempt to use an alternative IP geolocation service (ip-api.com)
-    const alternativeResponse = await fetch('http://ip-api.com/json');
+// router.get('/location', async (req, res) => {
+//   let country;
+//   try {
+//     // Attempt to use an alternative IP geolocation service (ip-api.com)
+//     const alternativeResponse = await fetch('http://ip-api.com/json');
 
-    if (alternativeResponse.ok) {
-        const data = await alternativeResponse.json();
-        country  = await data.country;
-        console.log('Successfully fetched from http://ip-api.com/json');
-        res.json(country);
-        return; // IMPORTANT: Return after successful response
-    }
+//     if (alternativeResponse.ok) {
+//         const data = await alternativeResponse.json();
+//         country  = await data.country;
+//         console.log('Successfully fetched from http://ip-api.com/json');
+//         res.json(country);
+//         return; // IMPORTANT: Return after successful response
+//     }
 
-    // If the alternative API also fails, try the original one (ipapi.co) and handle errors
-    const response = await fetch('https://ipapi.co/json/');
-    if (!response.ok) {
-      // Check for 429 specifically
-      if (response.status === 429) {
-        throw new Error('Too Many Requests from ipapi.co. Please try again later.');
-      } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-    }
-    const text = await response.json();
-      res.json(text.country_name)
-  } catch (error) {
-    console.error('Error fetching location:', error);
-    res.status(500).json({ error: error.message || 'Failed to fetch location' }); // Include the error message
-  }
-});
+//     // If the alternative API also fails, try the original one (ipapi.co) and handle errors
+//     const response = await fetch('https://ipapi.co/json/');
+//     if (!response.ok) {
+//       // Check for 429 specifically
+//       if (response.status === 429) {
+//         throw new Error('Too Many Requests from ipapi.co. Please try again later.');
+//       } else {
+//         throw new Error(`HTTP error! status: ${response.status}`);
+//       }
+//     }
+//     const text = await response.json();
+//       res.json(text.country_name)
+//   } catch (error) {
+//     console.error('Error fetching location:', error);
+//     res.status(500).json({ error: error.message || 'Failed to fetch location' }); // Include the error message
+//   }
+// });
 
 module.exports = router
