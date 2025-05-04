@@ -10,7 +10,7 @@ const app = express();
 const cookieparser = require("cookie-parser")
 
 app.use(cors({
-  origin: 'http://localhost:5173',  
+  origin: 'https://bankapp-frontend-8272.vercel.app/',  
   credentials: true                 
 }));
 app.use(express.json())
