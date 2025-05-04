@@ -67,8 +67,8 @@ router.post('/signup', upload.array('files', 10),async (req, res) => {
     res.cookie("token", token, {
       
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     res.json({ message: 'Logged in' ,id:_id});
@@ -100,8 +100,8 @@ router.post("/login",async (req,res)=>{
        const token =  GenerateToken({_id})
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     }).json({ message: 'Logged in' ,id:_id});
     }catch(err){
