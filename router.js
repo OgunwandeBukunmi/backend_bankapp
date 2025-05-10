@@ -103,9 +103,8 @@ router.post("/login",async (req,res)=>{
       secure: true,
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-    })
+    }).json({ message: 'Logged in' ,id:_id});
       console.log("token sent")
-        res.json({ message: 'Logged in' ,id:_id});
     }catch(err){
       console.log(err)
       res.status(404).json({error : "Invalid email or Password"})
