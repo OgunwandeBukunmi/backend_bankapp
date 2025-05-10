@@ -18,20 +18,19 @@ function GenerateToken(user){
 }
 
 function verifyToken(req,res,next) {
-  const token = req.cookies.token;
- 
-  if (!token) {
-    return res.status(401).json({ error: "Access denied. No token provided." });
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No token provided" });
   }
+
+  const token = authHeader.split(" ")[1];
+
   try {
     const decoded = jwt.verify(token, process.env.URIPassword);
-   
     req.user = decoded;
-   
     next();
   } catch (err) {
-    console.error("JWT Error:", err);
-    return res.status(403).json({ error: "Invalid or expired token." });
+    return res.status(403).json({ error: "Invalid or expired token" });
   }
 }
 
@@ -64,13 +63,8 @@ router.post('/signup', upload.array('files', 10),async (req, res) => {
     let _id = newUser._id
     const token =  GenerateToken({_id})
    
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-        domain: ".centkey-backend.onrender.com", 
-      sameSite: "None",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    }).json({ message: 'Logged in' ,id:_id});
+  
+    res.json({ message: 'Logged in' ,id:_id,token});
 
   
     
@@ -91,20 +85,12 @@ router.post("/login",async (req,res)=>{
       if(!user)  { 
         return res.json({error : "No user found"})
       }
-      console.log(user)
       if(user.password !== password) { 
         return res.json({error : "Incorrect password"})
       }
         let _id = user._id
        const token =  GenerateToken({_id})
-      console.log("token created ")
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-        domain: ".centkey-backend.onrender.com", 
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    }).json({ message: 'Logged in' ,id:_id});
+    res.json({ message: 'Logged in' ,id:_id,token});
     }catch(err){
       console.log(err)
       res.status(404).json({error : "Invalid email or Password"})
@@ -123,21 +109,8 @@ router.post("/otp",verifyToken,async(req,res)=>{
     console.error(err)
   }
 })
-router.post("/verifytoken", (req, res) => {
-  const token = req.cookies.token;
-  
-  if (!token) {
-    console.log("No token provided")
-    return res.status(401).json({ error: "No token provided" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.URIPassword); 
-    return res.status(200).json({user: decoded });
-  } catch (err) {
-    console.log("invalid token")
-    return res.status(401).json({ error: "Invalid token" });
-  }
+router.post("/verifytoken", verifyToken,(req,res)=>{
+  res.json({message : "Done"})
 });
 
 router.get("/user/:id", async(req,res)=>{
