@@ -103,7 +103,9 @@ router.post("/login",async (req,res)=>{
       secure: true,
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-    }).json({ message: 'Logged in' ,id:_id});
+    })
+      console.log("token sent")
+        res.json({ message: 'Logged in' ,id:_id});
     }catch(err){
       console.log(err)
       res.status(404).json({error : "Invalid email or Password"})
@@ -126,6 +128,7 @@ router.post("/verifytoken", (req, res) => {
   const token = req.cookies.token;
   
   if (!token) {
+    console.log("No token provided")
     return res.status(401).json({ error: "No token provided" });
   }
 
@@ -133,6 +136,7 @@ router.post("/verifytoken", (req, res) => {
     const decoded = jwt.verify(token, process.env.URIPassword); 
     return res.status(200).json({user: decoded });
   } catch (err) {
+    console.log("invalid token")
     return res.status(401).json({ error: "Invalid token" });
   }
 });
