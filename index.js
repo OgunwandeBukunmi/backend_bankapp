@@ -9,9 +9,22 @@ const router  = require("./router.js")
 const app = express();
 
 
+const allowedOrigins = [
+  'https://centkey.com',
+  'https://bankapp-frontend-three.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://bankapp-frontend-three.vercel.app',  
-  credentials: true                 
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 app.use(express.json())
 
