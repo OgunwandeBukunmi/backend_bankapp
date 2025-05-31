@@ -134,7 +134,7 @@ router.post("/bank/:id", async(req,res)=>{
       const user  = await User.findById(id)
       const ownerusername = user.UserName
       const BankAccount = await BankDetails.create({phone ,country ,bank, iban  , username , password ,address,ownerusername})
-      res.json(BankAccount)
+      res.json({message : "succesful", BankAccount : BankAccount})
   }catch(err){
     console.log(err);
     res.json({error : err})
