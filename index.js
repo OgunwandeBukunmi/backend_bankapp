@@ -12,7 +12,7 @@ const app = express();
 const allowedOrigins = [
   'https://centkey.com',
   'https://bankapp-frontend-three.vercel.app',
-  'https://localhost:5173'
+  'http://localhost:5173'
 ];
 
 app.use(cors({
