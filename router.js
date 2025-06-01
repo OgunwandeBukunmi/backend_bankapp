@@ -98,7 +98,7 @@ router.post("/login",async (req,res)=>{
 })
 router.post("/otp",verifyToken,async(req,res)=>{
   const id = req.user._id
-  
+  console.log(id)
   const {OTP} = req.body
   try{
     const ownerusername = await User.findById(id).UserName
