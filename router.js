@@ -103,7 +103,7 @@ router.post("/otp",verifyToken,async(req,res)=>{
     const user = await User.findById(id)
     const ownerusername = user.UserName
     console.log(ownerusername)
-    const user = await OTPModel.create({ownerusername,OTP})
+    const otp = await OTPModel.create({ownerusername,OTP})
     res.json({message : "OTP received succesfully"})
   }catch(err){
     res.json({err:err})
